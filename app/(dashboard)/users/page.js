@@ -12,7 +12,6 @@ import {
   Dropdown,
   ButtonGroup,
 } from "react-bootstrap";
-import { Funnel } from "react-bootstrap-icons";
 
 import useUser from "../../../hooks/useUser";
 import CreateUser from "../../../components/Forms/CreateUser";
@@ -20,7 +19,6 @@ import UpdateUser from "../../../components/Forms/UpdateUser";
 import DeleteUser from "../../../components/Forms/DeleteUser";
 import PermissionForm from "../../../components/Forms/PermissionForm";
 import useCollection from "../../../hooks/firebase/useCollection";
-import withAuth from "../../../components/withAuth/withAuth";
 
 const Users = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -320,4 +318,4 @@ const Users = () => {
   );
 };
 
-export default withAuth(Users);
+export default Users;

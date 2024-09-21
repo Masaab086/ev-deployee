@@ -8,7 +8,6 @@ import { useState } from "react";
 // import sub components
 import NavbarVertical from "/layouts/navbars/NavbarVertical";
 import NavbarTop from "/layouts/navbars/NavbarTop";
-import withAuth from "../../components/withAuth/withAuth";
 import { getUser } from "../../firebase/logintUser";
 import { useRouter } from "next/navigation";
 

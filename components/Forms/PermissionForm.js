@@ -24,8 +24,8 @@ const PermissionForm = (props) => {
     <Container>
       {allPermissions.map((permission, index) => {
         return (
-          <Container>
-            <Row className="mb-3 bg-gray-100 px-4" key={"permission-" + index}>
+          <Container key={"permissiom-" + index}>
+            <Row className="mb-3 bg-gray-100 px-4">
               <Col sm={6} className="fw-bold  fs-4  text-bold">
                 {permission.name}
               </Col>
