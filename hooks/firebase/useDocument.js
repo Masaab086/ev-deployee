@@ -11,7 +11,7 @@ import { db } from "../../firebase.config";
 
 const useDocument = () => {
   const [docLoading, setDocLoading] = useState(false);
-  const [error, setError] = (useState < Error) | (null > null);
+  const [error, setError] = useState(null);
 
   // Fetch a document
   const fetchDocument = async (collectionName, docId) => {

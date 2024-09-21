@@ -1,12 +1,10 @@
-// You're using useForm from React Hook Form, but you need to apply it to your form fields correctly. Here's the modified code:
-// Jsx
 import React from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { FormSelect } from "widgets";
 import { useForm } from "react-hook-form";
+import useCollection from "../../hooks/firebase/useCollection";
 
 const UpdateUser = (props) => {
-  const { data } = props;
+  const { data, onClose = () => {} } = props;
 
   const roleOptions = [
     { value: "Admin", label: "Admin" },
@@ -15,7 +13,11 @@ const UpdateUser = (props) => {
     { value: "Customer", label: "Customer" },
   ];
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       id: data.id,
       name: data.name,
@@ -24,8 +26,12 @@ const UpdateUser = (props) => {
     },
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const { updateDocument } = useCollection("users");
+
+  const onSubmit = async (values) => {
+    await updateDocument(values);
+    onClose();
+    // console.log(values);
   };
 
   return (
@@ -37,20 +43,8 @@ const UpdateUser = (props) => {
             type="text"
             placeholder="User Id"
             id="id"
-            name="id"
             disabled
             {...register("id")}
-          />
-        </Col>
-        <Col sm={12} className="mb-3 mb-lg-0">
-          <Form.Label htmlFor="name">Full name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Full name"
-            id="name"
-            name="name"
-            required
-            {...register("name")}
           />
         </Col>
       </Row>
@@ -58,31 +52,54 @@ const UpdateUser = (props) => {
         <Col md={12} xs={12}>
           <Form.Label htmlFor="email">Email</Form.Label>
           <Form.Control
+            disabled
             type="email"
             placeholder="Email"
             id="email"
-            name="email"
-            required
-            {...register("email")}
+            {...register("email", {
+              required: true,
+              pattern: /^\S+@\S+$/i,
+            })}
           />
+          {errors.email && (
+            <div className="text-danger">Invalid email address</div>
+          )}
+        </Col>
+      </Row>
+
+      <Row>
+        <Col sm={12} className="mb-3 mb-lg-0">
+          <Form.Label htmlFor="name">Full name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Full name"
+            id="name"
+            {...register("name", { required: true, maxLength: 100 })}
+          />
+          {errors.name && (
+            <div className="text-danger">
+              Name is required and should be less than 100 characters
+            </div>
+          )}
         </Col>
       </Row>
       <Row className="mb-3">
         <Col md={12} xs={12}>
           <Form.Label htmlFor="role">Role</Form.Label>
-          <Form.Control
-            as={FormSelect}
-            placeholder="Select Role"
-            id="role"
-            name="role"
-            options={roleOptions}
-            {...register("role")}
-          />
+          <Form.Select id="role" {...register("role", { required: true })}>
+            <option value="">Select Role</option>
+            {roleOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Form.Select>
+          {errors.role && <div className="text-danger">Role is required</div>}
         </Col>
       </Row>
       <Row className="align-items-center">
         <Col md={{ offset: 4, span: 8 }} xs={12} className="mt-4">
-          <Button variant="primary" type="submit">
+          <Button variant="success" type="submit">
             Update User
           </Button>
         </Col>
@@ -92,5 +109,3 @@ const UpdateUser = (props) => {
 };
 
 export default UpdateUser;
-// In the above code, I've added the field names as arguments to the register function, like this: {...register("id")}, {...register("name")}, and so on. This tells React Hook Form to register each field with the corresponding name.
-// Now, when you submit the form, the onSubmit function will receive the form data with the correct field names.

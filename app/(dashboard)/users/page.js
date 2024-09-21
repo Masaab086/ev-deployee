@@ -19,6 +19,8 @@ import CreateUser from "../../../components/Forms/CreateUser";
 import UpdateUser from "../../../components/Forms/UpdateUser";
 import DeleteUser from "../../../components/Forms/DeleteUser";
 import PermissionForm from "../../../components/Forms/PermissionForm";
+import useCollection from "../../../hooks/firebase/useCollection";
+import withAuth from "../../../components/withAuth/withAuth";
 
 const Users = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -29,14 +31,47 @@ const Users = () => {
   const [selected, setSelected] = useState(null);
 
   // Custom hoock to handle user information
-  const { users, deleteUserById, updateUser, createUser } = useUser();
+  const { users, createUser, getAllUsers } = useUser();
+  const { deleteDocument, getDocuments, updateDocument } =
+    useCollection("users");
+
+  useEffect(() => {
+    getAllUsers();
+  }, [isCreateOpen, isUpdateOpen, isDeleteOpen, isPermissionOpen]);
+
+  // useEffect(() => {
+  //   const updatePermissions = async () => {
+  //     const users = await getDocuments();
+
+  //     users.map(async (user) => {
+  //       await updateDocument({
+  //         id: user.id,
+  //         role: user.role,
+  //         email: user.email,
+  //         name: user.name,
+  //         permissions: [],
+  //       });
+  //     });
+  //   };
+  //   updatePermissions();
+  // }, []);
+  // const isUserLoggedin = getUser();
+
+  // if (!isUserLoggedin) {
+  //   return null;
+  // }
+
   return (
     <>
       <Container fluid className="p-6">
         {/* <Container> */}
         <Row>
           <Col sm={2}>
-            <Button className="mb-3" onClick={() => setIsCreateOpen(true)}>
+            <Button
+              variant="success"
+              className="mb-3"
+              onClick={() => setIsCreateOpen(true)}
+            >
               Create New User
             </Button>
           </Col>
@@ -132,7 +167,7 @@ const Users = () => {
                           setSelected(user);
                           setIsPermissionOpen(true);
                         }}
-                        variant="primary"
+                        variant="success"
                         className="me-1"
                       >
                         Edit Permissions
@@ -175,7 +210,7 @@ const Users = () => {
                             setSelected(user);
                             setIsPermissionOpen(true);
                           }}
-                          variant="primary"
+                          variant="success"
                           className="me-1"
                         >
                           Edit Permissions
@@ -217,7 +252,13 @@ const Users = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CreateUser />
+          <CreateUser
+            createUser={createUser}
+            onClose={() => {
+              setIsCreateOpen(false);
+              getAllUsers();
+            }}
+          />
         </Modal.Body>
       </Modal>
       <Modal
@@ -232,7 +273,12 @@ const Users = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <UpdateUser data={selected} />
+          <UpdateUser
+            data={selected}
+            onClose={() => {
+              setIsUpdateOpen(false);
+            }}
+          />
         </Modal.Body>
       </Modal>
       <Modal
@@ -250,7 +296,7 @@ const Users = () => {
           <DeleteUser
             data={selected}
             onClose={() => setIsDeleteOpen(false)}
-            onDelete={() => deleteUserById(selected?.id)}
+            onDelete={() => deleteDocument(selected)}
           />
         </Modal.Body>
       </Modal>
@@ -274,4 +320,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default withAuth(Users);

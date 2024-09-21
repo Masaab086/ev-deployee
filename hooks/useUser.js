@@ -1,44 +1,18 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-// import useCollection from "./firebase/useCollection";
+import useCollection from "./firebase/useCollection";
+import useRegister from "./firebase/useRegister";
 
 const useUser = () => {
   const [user, setUser] = useState(null);
-  const [users, setUsers] = useState([
-    {
-      id: "AXPX8yVe8wcpQ6PncjF6594YY342",
-      email: "masaabgul086@gmail.com",
-      name: "Masaab",
-      role: "Admin",
-      permissions: ["viewing_dashboard"],
-    },
-    {
-      id: "St51qWy7qFQoGK03gpMUMsAFgHH3",
-      email: "customer@gmail.com",
-      name: "Customer",
-      role: "Customer",
-      permissions: ["viewing_dashboard"],
-    },
-    {
-      id: "Y9DygBWFrLf7dR8pQxI4fCck9GS2",
-      email: "vendor@gmail.com",
-      name: "Vendor",
-      role: "Vendor",
-      permissions: ["viewing_dashboard"],
-    },
-    {
-      id: "hNtitXy6DvfO41xmbq2i0YbhqwM2",
-      email: "dealer@gmail.com",
-      name: "Dealer",
-      role: "Dealer",
-      permissions: ["viewing_dashboard"],
-    },
-  ]);
+  const [users, setUsers] = useState([]);
 
-  //   const { data } = useCollection("users");
+  const { registerUser } = useRegister();
+  const { getDocuments } = useCollection("users");
 
-  const createUser = useCallback((data) => {
+  const createUser = useCallback(async (data) => {
     // Saving data  and creating user
+    await registerUser(data);
   }, []);
   const updateUser = useCallback((id, data) => {
     // Savaing data and updating user
@@ -46,8 +20,10 @@ const useUser = () => {
 
   const getAllUsers = useCallback(async () => {
     // Getting all users here
-    // setUsers(data);
-  }, []);
+    const users = await getDocuments();
+    setUsers(users);
+    console.log(users);
+  }, [users]);
 
   const getUserById = useCallback((id) => {
     // Getting a user by id

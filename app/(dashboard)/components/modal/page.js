@@ -17,8 +17,7 @@ import {
 } from 'react-bootstrap';
 
 // import widget/custom components
-import { HighlightCode } from 'widgets';
-
+import { HighlightCode } from "../../../../widgets/index";
 // import react code data file
 import {
 	SampleExamplesCode,
@@ -28,7 +27,7 @@ import {
 	VerticallyCenteredCode,
 	TooltipsPopoversCode,
 	OptionalSizesCode
-} from 'data/code/ModalsCode';
+} from '../../../../data/code/ModalsCode';
 
 const Modals = () => {
 	const [show, setShow] = useState(false);

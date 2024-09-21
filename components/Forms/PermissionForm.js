@@ -1,50 +1,44 @@
 // You're using useForm from React Hook Form, but you need to apply it to your form fields correctly. Here's the modified code:
 // Jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { FormSelect } from "widgets";
+import { FormSelect } from "../../widgets/index";
 import { useForm } from "react-hook-form";
+import useCollection from "../../hooks/firebase/useCollection";
 
 const PermissionForm = (props) => {
   const { data } = props;
 
-  const allPermissions = ["viewing_dashboard", "sending_reminders"];
+  const [allPermissions, setAllPermissions] = useState([]);
+  const { getDocuments } = useCollection("permissions");
 
-  const roleOptions = [
-    { value: "viewing_dashboard", label: "viewing_dashboard" },
-    { value: "sending_reminders", label: "sending_reminders" },
-  ];
-
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      role: data.role,
-    },
-  });
-
-  const onSubmit = (values) => {
-    console.log(values);
-  };
+  useEffect(() => {
+    const fetchPermission = async () => {
+      const docs = await getDocuments();
+      setAllPermissions(docs);
+    };
+    fetchPermission();
+  }, []);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Container>
       {allPermissions.map((permission, index) => {
         return (
           <Container>
             <Row className="mb-3 bg-gray-100 px-4" key={"permission-" + index}>
               <Col sm={6} className="fw-bold  fs-4  text-bold">
-                {permission}
+                {permission.name}
               </Col>
               <Col sm={6}>
                 <Button
                   variant={
-                    data.permissions.includes(permission) ? "danger" : "primary"
+                    data.permissions.includes(permission.name)
+                      ? "danger"
+                      : "primary"
                   }
                   type="submit"
                 >
-                  {data.permissions.includes(permission)
+                  {data.permissions.includes(permission.name)
                     ? "Block Permission"
                     : "Allow permission"}
                 </Button>
@@ -53,7 +47,7 @@ const PermissionForm = (props) => {
           </Container>
         );
       })}
-    </Form>
+    </Container>
   );
 };
 

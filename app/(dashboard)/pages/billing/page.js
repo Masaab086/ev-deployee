@@ -1,12 +1,12 @@
-'use client'
+"use client";
 // import node module libraries
-import { Row, Col, Container } from 'react-bootstrap';
+import { Row, Col, Container } from "react-bootstrap";
 
 // import widget as custom components
-import { PageHeading } from 'widgets'
+import { PageHeading } from "../../../../widgets/index";
 
 // import sub components
-import { BillingAddress, CurrentPlan } from 'sub-components'
+import { BillingAddress, CurrentPlan } from "../../../../sub-components";
 
 const Billing = () => {
   return (
@@ -15,19 +15,23 @@ const Billing = () => {
       <PageHeading heading="Billing" />
 
       <Row className="mt-6">
-        <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10, offset: 1 }} md={12} xs={12}>
+        <Col
+          xl={{ span: 8, offset: 2 }}
+          lg={{ span: 10, offset: 1 }}
+          md={12}
+          xs={12}
+        >
           <Row>
             {/* Current Plan Overview */}
             <CurrentPlan />
 
             {/* Billing Address */}
             <BillingAddress />
-
           </Row>
         </Col>
       </Row>
     </Container>
-  )
-}
+  );
+};
 
-export default Billing
+export default Billing;

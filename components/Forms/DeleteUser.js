@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { FormSelect } from "widgets";
+import { FormSelect } from "../../widgets/index";
 
 const DeleteUser = (props) => {
   const { onClose = () => {}, onDelete = () => {} } = props;

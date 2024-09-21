@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-import { RegisterUser } from "../firebase/registerUser";
+import { RegisterUser } from "../../firebase/registerUser";
 // import showAlert from "../utils/alert";
-import { AuthErrorMessages } from "../utils/errorMessages";
+// import { AuthErrorMessages } from "/utils/errorMessages";
 import { updateProfile } from "firebase/auth";
 import useDocument from "./useDocument";
 
@@ -14,10 +14,10 @@ import useDocument from "./useDocument";
 // };
 
 const useRegister = () => {
-  const [isLoading, setIsLoading] = useState < boolean > false;
+  const [isLoading, setIsLoading] = useState(false);
   const { createDocument } = useDocument();
 
-  const registerUser = async (data) => {
+  const registerUser = useCallback(async (data) => {
     setIsLoading(true);
     try {
       const user = await RegisterUser(data.email, data.password);
@@ -42,12 +42,12 @@ const useRegister = () => {
 
       return user;
     } catch (error) {
-      const message = AuthErrorMessages(error.code);
+      // const message = AuthErrorMessages(error.code);
       //   showAlert("Registration Failed", message);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return { isLoading, registerUser };
 };

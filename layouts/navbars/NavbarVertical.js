@@ -4,17 +4,19 @@ import { Fragment, useContext } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
-import { ListGroup, Card, Image, Badge } from "react-bootstrap";
+import { ListGroup, Card, Badge } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 import AccordionContext from "react-bootstrap/AccordionContext";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
+import Image from "next/image";
+import logo from "../../assets/logoWhite.png";
 
 // import simple bar scrolling used for notification item scrolling
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 
 // import routes file
-import { DashboardMenu } from "routes/DashboardRoutes";
+import { DashboardMenu } from "../../routes/DashboardRoutes";
 
 const NavbarVertical = (props) => {
   const location = usePathname();
@@ -93,8 +95,8 @@ const NavbarVertical = (props) => {
     <Fragment>
       <SimpleBar style={{ maxHeight: "100vh" }}>
         <div className="nav-scroller">
-          <Link href="/" className="navbar-brand text-white font-bold">
-            EV Charging
+          <Link href="/" className="navbar-brand text-white font-bold px-auto">
+            <Image src={logo} width={100} height={75} />
           </Link>
         </div>
         {/* Dashboard Menu */}
