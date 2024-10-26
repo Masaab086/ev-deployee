@@ -6,6 +6,7 @@ import {
   addDoc,
   collection,
   DocumentData,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase.config";
 
@@ -55,7 +56,21 @@ const useDocument = () => {
     }
   };
 
-  return { docLoading, error, fetchDocument, createDocument };
+  const deleteDocument = async (collectionName, docId) => {
+    setDocLoading(true);
+    try {
+      const docRef = doc(db, collectionName, docId);
+      await deleteDoc(docRef);
+
+      return { success: true };
+    } catch (err) {
+      setError(err);
+      return { success: false };
+    } finally {
+      setDocLoading(false);
+    }
+  };
+  return { docLoading, error, fetchDocument, createDocument, deleteDocument };
 };
 
 export default useDocument;

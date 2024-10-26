@@ -50,6 +50,21 @@ const useCollection = (collectionName) => {
     }
   });
 
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const querySnapshot = await getDocs(collection(db, collectionName));
+      const documents = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setData(documents);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -70,7 +85,15 @@ const useCollection = (collectionName) => {
     fetchData();
   }, [collectionName]);
 
-  return { data, loading, error, getDocuments, updateDocument, deleteDocument };
+  return {
+    data,
+    loading,
+    error,
+    getDocuments,
+    updateDocument,
+    deleteDocument,
+    refresh,
+  };
 };
 
 export default useCollection;
