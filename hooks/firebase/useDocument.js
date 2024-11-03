@@ -35,6 +35,8 @@ const useDocument = () => {
 
   // Create a document
   const createDocument = async (collectionName, data, docId) => {
+    console.log("Creating");
+    console.log(data);
     setDocLoading(true);
     try {
       if (docId) {
@@ -50,6 +52,7 @@ const useDocument = () => {
       return { success: true };
     } catch (err) {
       setError(err);
+
       return { success: false };
     } finally {
       setDocLoading(false);

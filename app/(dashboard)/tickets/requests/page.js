@@ -26,20 +26,22 @@ const Tickets = () => {
 
   const handleAssign = async (vendorId) => {
     if (selected) {
-      console.log(selected);
       const deletedDocument = await documentOperation.deleteDocument(
         "requestedTicketsForAssignment",
         selected.id
       );
 
-      console.log(deletedDocument);
       const selectedItem = selected;
       delete selected.id;
       selectedItem.vendorId = vendorId;
       selectedItem.accepted = false;
 
-      //   await documentOperation.createDocument("assignedTickets", selectedItem);
-      tickets.refresh();
+      const resp = await documentOperation.createDocument(
+        "assignedTickets",
+        selectedItem
+      );
+
+      await tickets.refresh();
     }
     setOpen(false);
   };

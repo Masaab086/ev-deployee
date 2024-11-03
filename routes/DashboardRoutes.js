@@ -316,6 +316,12 @@ export const DashboardMenu = [
       },
     ],
   },
+  {
+    id: uuid(),
+    title: "Stations",
+    icon: "",
+    link: "/stations",
+  },
 ];
 
 export default DashboardMenu;
