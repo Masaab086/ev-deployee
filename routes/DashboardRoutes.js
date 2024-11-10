@@ -322,6 +322,12 @@ export const DashboardMenu = [
     icon: "",
     link: "/stations",
   },
+  {
+    id: uuid(),
+    title: "Reports",
+    icon: "",
+    link: "/reports",
+  },
 ];
 
 export default DashboardMenu;
